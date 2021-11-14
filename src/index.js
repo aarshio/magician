@@ -13,6 +13,9 @@ import "@fontsource/roboto/700.css";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css file
+
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
