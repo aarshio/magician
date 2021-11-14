@@ -130,6 +130,7 @@ const History = () => {
         return {
           ...item,
           symbol: item.symbol.split(" ")[0],
+          orderTime: item.orderTime.replace(";", " "), // for firefox and safari
         };
       });
       setOriginalData(parsed);
