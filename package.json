@@ -16,6 +16,7 @@
     "ag-grid-react": "^26.1.0",
     "axios": "^0.24.0",
     "currency.js": "^2.0.4",
+    "date-fns": "^2.25.0",
     "history": "^5.1.0",
     "i": "^0.3.7",
     "moment": "^2.29.1",
