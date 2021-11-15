@@ -8,6 +8,7 @@ import {
   Typography,
   Stack,
   Divider,
+  Paper,
 } from "@mui/material";
 import { DateRangePicker } from "react-date-range";
 import currency from "currency.js";
@@ -15,6 +16,8 @@ import moment from "moment";
 import * as timeago from "timeago.js";
 
 import Pnl from "../utils/Pnl";
+import Performance from "../Charts/Performance";
+import Symbols from "../Charts/Symbols";
 
 import { tradeHistoryAll } from "../../api";
 
@@ -60,8 +63,9 @@ const History = () => {
       let date = new Date(item.orderTime);
       date = convertUTCDateToLocalDate(date);
       return (
-        item.orderTime === "" ||
-        (date >= selectionRange.startDate && date <= selectionRange.endDate)
+        item.orderTime !== "" &&
+        date >= selectionRange.startDate &&
+        date <= selectionRange.endDate
       );
     });
 
@@ -130,7 +134,7 @@ const History = () => {
         return {
           ...item,
           symbol: item.symbol.split(" ")[0],
-          orderTime: item.orderTime.replace(";", " "), // for firefox and safari
+          orderTime: item.orderTime.replace(";", "T"), // for firefox and safari
         };
       });
       setOriginalData(parsed);
@@ -146,7 +150,7 @@ const History = () => {
 
   return (
     <>
-      <Toolbar>
+      <Toolbar style={{ justifyContent: "center", minWidth: "100rem" }}>
         <Button aria-describedby={id} onClick={handleClick}>
           {moment(selectionRange.startDate).format("MMM DD, YYYY")} -{" "}
           {moment(selectionRange.endDate).format("MMM DD, YYYY")}
@@ -185,23 +189,17 @@ const History = () => {
           Updated {updatedOn}
         </Typography>
       </Toolbar>
-      {/* <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Paper>
-         
-          </Paper>
-        </Grid>
-      </Grid> */}
 
       <Stack
         direction="row"
         divider={<Divider orientation="vertical" flexItem />}
         spacing={2}
-        style={{ margin: "0.5rem", marginTop: "0" }}
+        justifyContent="center"
+        style={{ margin: "0.5rem", marginTop: "0", minWidth: "100rem" }}
       >
-        <Typography variant="subtitle2" textAlign="center">
+        {/* <Typography variant="subtitle2" textAlign="center">
           Showing <div>{stats.showing}</div>
-        </Typography>
+        </Typography> */}
         <Typography variant="subtitle2" textAlign="center">
           Count <div>{stats.count}</div>
         </Typography>
@@ -235,16 +233,24 @@ const History = () => {
         </Typography>
       </Stack>
 
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={1}
+        style={{
+          minWidth: "97rem",
+          overflowX: "auto",
+        }}
+        justifyContent="center"
+      >
         <Grid
           item
-          xs={9}
-          style={{ height: "90vh", overflow: "auto", minWidth: "71rem" }}
+          style={{
+            height: "87vh",
+            overflow: "auto",
+            minWidth: "67rem",
+          }}
         >
-          <div
-            className="ag-theme-balham"
-            style={{ height: "100%", width: "71rem" }}
-          >
+          <div className="ag-theme-balham" style={{ height: "100%" }}>
             <AgGridReact
               rowData={rowData}
               defaultColDef={{
@@ -262,7 +268,7 @@ const History = () => {
                 field="symbol"
                 sortable={true}
                 filter={true}
-                maxWidth={80}
+                maxWidth={60}
               />
               <AgGridColumn
                 field="description"
@@ -301,7 +307,7 @@ const History = () => {
                 field="expiry"
                 sortable={true}
                 filter={true}
-                maxWidth={120}
+                maxWidth={100}
                 valueFormatter={(params) => {
                   if (params.data.expiry !== "")
                     return moment(params.data.expiry).format("MMM DD, YYYY");
@@ -313,7 +319,7 @@ const History = () => {
                 field="strike"
                 sortable={true}
                 filter={true}
-                maxWidth={80}
+                maxWidth={65}
                 valueFormatter={(params) => {
                   // check if params.data is number
                   if (params.data.strike !== "")
@@ -347,10 +353,7 @@ const History = () => {
                 field="fifoPnlRealized"
                 sortable={true}
                 filter={true}
-                maxWidth={120}
-                // valueFormatter={(params) => {
-                //   return currency(params.data.fifoPnlRealized).format();
-                // }}
+                maxWidth={100}
                 cellRendererSelector={(params) => {
                   return { component: "pnl" };
                 }}
@@ -376,7 +379,7 @@ const History = () => {
                 sortable={true}
                 filter={true}
                 sort="desc"
-                maxWidth={150}
+                maxWidth={120}
                 valueFormatter={(params) => {
                   return moment(params.data.orderTime).format(
                     "MMM DD, hh:MM a"
@@ -385,6 +388,36 @@ const History = () => {
               />
             </AgGridReact>
           </div>
+        </Grid>
+        <Grid
+          item
+          xs
+          justifyContent="center"
+          style={{
+            minWidth: "30rem",
+            maxWidth: "60rem",
+            maxHeight: "87vh",
+            overflow: "auto",
+            paddingTop: 0,
+            marginTop: "0.5rem",
+          }}
+        >
+          <Paper elevation={2} style={{ paddingTop: 0 }}>
+            <Grid container spacing={0} justifyContent="center">
+              <Grid item xs={12}>
+                <Performance originalData={originalData} />
+              </Grid>
+              <Divider style={{ width: "100%" }} />
+              <Grid item xs={12} style={{ height: "50rem" }}>
+                <Symbols
+                  style={{ margin: 0, padding: 0 }}
+                  rowData={rowData}
+                  stats={stats}
+                />
+              </Grid>
+              <Divider style={{ width: "100%" }} />
+            </Grid>
+          </Paper>
         </Grid>
       </Grid>
     </>
