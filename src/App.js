@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 const App = () => {
   useEffect(() => {
-    ReactGA.initialize("G-S37PVZB923");
+    ReactGA.initialize("G-3S7XVNEQ28");
   }, []);
 
   return <Path />;
