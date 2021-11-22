@@ -18,6 +18,7 @@ import * as timeago from "timeago.js";
 import Pnl from "../utils/Pnl";
 import Performance from "../Charts/Performance";
 import Symbols from "../Charts/Symbols";
+import SymbolLink from "../utils/SymbolLink";
 
 import { tradeHistoryAll } from "../../api";
 
@@ -261,6 +262,7 @@ const History = () => {
               }}
               frameworkComponents={{
                 pnl: Pnl,
+                symLink: SymbolLink,
               }}
             >
               {/* <AgGridColumn field="_id" sortable={true} filter={true} maxWidth={90} /> */}
@@ -269,6 +271,9 @@ const History = () => {
                 sortable={true}
                 filter={true}
                 maxWidth={60}
+                cellRendererSelector={(params) => {
+                  return { component: "symLink" };
+                }}
               />
               <AgGridColumn
                 field="description"

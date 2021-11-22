@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 
 import Layout from "../Layout";
 import History from "../History";
+import Universe from "../Universe";
+import Symbol from "../Universe/symbol";
 
 export default function App() {
   return (
@@ -13,7 +15,8 @@ export default function App() {
       <Layout>
         <Routes>
           <Route path="/">
-            <Route index element={<History />} />
+            <Route index element={<Universe />} />
+            <Route path="universe/:symbol" element={<Symbol />} />
             <Route path="about" element={<Home />} />
             <Route path="history" element={<History />} />
             <Route path="*" element={<Home />} />
